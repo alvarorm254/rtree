@@ -1,0 +1,53 @@
+In file included from /home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/Test.cpp:8:0:
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:99:81: error: ‘std::function’ has not been declared
+   int Search(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS], std::function<bool (const DATATYPE&)> callback) const;
+                                                                                 ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:99:89: error: expected ‘,’ or ‘...’ before ‘<’ token
+   int Search(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS], std::function<bool (const DATATYPE&)> callback) const;
+                                                                                         ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:362:67: error: ‘std::function’ has not been declared
+   bool Search(Node* a_node, Rect* a_rect, int& a_foundCount, std::function<bool (const DATATYPE&)> callback) const;
+                                                                   ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:362:75: error: expected ‘,’ or ‘...’ before ‘<’ token
+   bool Search(Node* a_node, Rect* a_rect, int& a_foundCount, std::function<bool (const DATATYPE&)> callback) const;
+                                                                           ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h: In copy constructor ‘RTree<DATATYPE, ELEMTYPE, NUMDIMS, ELEMTYPEREAL, TMAXNODES, TMINNODES>::RTree(const RTree<DATATYPE, ELEMTYPE, NUMDIMS, ELEMTYPEREAL, TMAXNODES, TMINNODES>&)’:
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:479:47: warning: delegating constructors only available with -std=c++11 or -std=gnu++11
+ RTREE_QUAL::RTree(const RTree& other) : RTree()
+                                               ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h: At global scope:
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:581:91: error: ‘std::function’ has not been declared
+ int RTREE_QUAL::Search(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS], std::function<bool (const DATATYPE&)> callback) const
+                                                                                           ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:581:99: error: expected ‘,’ or ‘...’ before ‘<’ token
+ int RTREE_QUAL::Search(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS], std::function<bool (const DATATYPE&)> callback) const
+                                                                                                   ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h: In member function ‘int RTree<DATATYPE, ELEMTYPE, NUMDIMS, ELEMTYPEREAL, TMAXNODES, TMINNODES>::Search(const ELEMTYPE*, const ELEMTYPE*, int) const’:
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:601:37: error: ‘callback’ was not declared in this scope
+   Search(m_root, &rect, foundCount, callback);
+                                     ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h: At global scope:
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:1676:77: error: ‘std::function’ has not been declared
+ bool RTREE_QUAL::Search(Node* a_node, Rect* a_rect, int& a_foundCount, std::function<bool (const DATATYPE&)> callback) const
+                                                                             ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:1676:85: error: expected ‘,’ or ‘...’ before ‘<’ token
+ bool RTREE_QUAL::Search(Node* a_node, Rect* a_rect, int& a_foundCount, std::function<bool (const DATATYPE&)> callback) const
+                                                                                     ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h: In member function ‘bool RTree<DATATYPE, ELEMTYPE, NUMDIMS, ELEMTYPEREAL, TMAXNODES, TMINNODES>::Search(RTree<DATATYPE, ELEMTYPE, NUMDIMS, ELEMTYPEREAL, TMAXNODES, TMINNODES>::Node*, RTree<DATATYPE, ELEMTYPE, NUMDIMS, ELEMTYPEREAL, TMAXNODES, TMINNODES>::Rect*, int&, int) const’:
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:1689:75: error: ‘callback’ was not declared in this scope
+         if(!Search(a_node->m_branch[index].m_child, a_rect, a_foundCount, callback))
+                                                                           ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:1707:14: error: ‘callback’ was not declared in this scope
+           if(callback && !callback(id))
+              ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/Test.cpp: In function ‘int main()’:
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/Test.cpp:69:73: error: invalid conversion from ‘bool (*)(ValueType) {aka bool (*)(int)}’ to ‘int’ [-fpermissive]
+   nhits = tree.Search(search_rect.min, search_rect.max, MySearchCallback);
+                                                                         ^
+In file included from /home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/Test.cpp:8:0:
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:30:20: note:   initializing argument 3 of ‘int RTree<DATATYPE, ELEMTYPE, NUMDIMS, ELEMTYPEREAL, TMAXNODES, TMINNODES>::Search(const ELEMTYPE*, const ELEMTYPE*, int) const [with DATATYPE = int; ELEMTYPE = int; int NUMDIMS = 2; ELEMTYPEREAL = float; int TMAXNODES = 4; int TMINNODES = 2]’
+ #define RTREE_QUAL RTree<DATATYPE, ELEMTYPE, NUMDIMS, ELEMTYPEREAL, TMAXNODES, TMINNODES>
+                    ^
+/home/alvaro/Escritorio/CURSOS/AED/proyecto/testeos/RTree.h:581:5: note: in expansion of macro ‘RTREE_QUAL’
+ int RTREE_QUAL::Search(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS], std::function<bool (const DATATYPE&)> callback) const
+     ^
