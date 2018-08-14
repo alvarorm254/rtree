@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <functional>
 #include <vector>
+#include <string>
 using namespace std;
 
 #define ASSERT assert // RTree uses ASSERT( condition )
@@ -40,7 +41,7 @@ struct  data_node{
   //data_node();
 };
 vector<data_node> data_tree;
-
+vector<int> search_export;
 int export_aux;
 // Fwd decl
 class RTFileStream;  // File I/O helper class, look below for implementation and notes.
@@ -302,7 +303,7 @@ protected:
   {
     Rect m_rect;                                  ///< Bounds
     Node* m_child;                                ///< Child node
-    DATATYPE m_data;                              ///< Data Id
+    int m_data;                              ///< Data Id
   };
 
   /// Node for each branch level
@@ -367,7 +368,7 @@ protected:
   ListNode* AllocListNode();
   void FreeListNode(ListNode* a_listNode);
   bool Overlap(Rect* a_rectA, Rect* a_rectB) const;
-  bool Cover(Rect* a_rectA, Rect* a_rectB) const;
+  bool Cover(Rect* a_rectA, Branch* a_rectB) const;
   void ReInsert(Node* a_node, ListNode** a_listNode);
   bool Search(Node* a_node, Rect* a_rect, int& a_foundCount, std::function<bool (const DATATYPE&)> callback) const;
   void RemoveAllRec(Node* a_node);
@@ -542,7 +543,7 @@ void RTREE_QUAL::read_MBR_tree(Node *p_node){
       data_tree[export_aux].limits[2*axis+1]=p_node->m_branch[index].m_rect.m_max[axis];
       //cout<<data_tree[export_aux].limits[2*axis+1]<<" ";
     }
-    data_tree[export_aux].tag="rk";
+    //data_tree[export_aux].tag="R"+to_string(p_node->m_level)+"_"+to_string(index);
     //cout<<"]"<<endl;
 
     if(p_node->m_level == 0)
@@ -566,6 +567,11 @@ void RTREE_QUAL::read_MBR_tree(Node *p_node){
 
 }
 
+
+void get_tags(){
+
+}
+
 RTREE_TEMPLATE
 void RTREE_QUAL::Updatetree(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDIMS], const DATATYPE& a_dataId)
 {
@@ -585,6 +591,7 @@ void RTREE_QUAL::Updatetree(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[
   //cout<<"--------------------"<<endl;
   //cout<<"Elementos en root: "<<m_root->m_count<<endl;
   read_MBR_tree(m_root);
+  get_tags();////////////////////////////////Aun por definir
   cout<<"PLOTING EXPORT DATA"<<endl;
   cout<<"N_MBR: "<<export_aux+1<<endl;
   cout<<"-----------------------------------------"<<endl;
@@ -598,6 +605,7 @@ void RTREE_QUAL::Updatetree(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[
     cout<<" ]"<<endl;
     cout<<"Leaf: "<<data_tree[i].leaf<<endl;
     cout<<"ID: "<<data_tree[i].nivel_data<<endl;
+    cout<<"Tag: "<<data_tree[i].tag<<endl;
     cout<<"----------------------------------------"<<endl;
     cout<<"----------------------------------------"<<endl;
     cout<<"----------------------------------------"<<endl;
@@ -637,6 +645,7 @@ int RTREE_QUAL::Search(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDI
 #endif //_DEBUG
 
   Rect rect;
+  search_export.clear();
 
   for(int axis=0; axis<NUMDIMS; ++axis)
   {
@@ -648,6 +657,11 @@ int RTREE_QUAL::Search(const ELEMTYPE a_min[NUMDIMS], const ELEMTYPE a_max[NUMDI
 
   int foundCount = 0;
   Search(m_root, &rect, foundCount, callback);
+  cout<<"Imprimiendo vector search: "<<endl;
+  cout<<"---------------------------"<<endl;
+  for (int i = 0; i < search_export.size(); i++) {
+    cout<<"Elemento "<<i<<" con ID "<<search_export[i]<<endl;
+  }
 
   return foundCount;
 }
@@ -1682,8 +1696,9 @@ bool RTREE_QUAL::Overlap(Rect* a_rectA, Rect* a_rectB) const
 }
 
 RTREE_TEMPLATE
-bool RTREE_QUAL::Cover(Rect* a_rectA, Rect* a_rectB) const
+bool RTREE_QUAL::Cover(Rect* a_rectA, Branch* a_branch) const
 {
+  Rect* a_rectB=&a_branch->m_rect;
   ASSERT(a_rectA && a_rectB);
   bool aux=true;
 
@@ -1697,11 +1712,13 @@ bool RTREE_QUAL::Cover(Rect* a_rectA, Rect* a_rectB) const
   }
   if(aux){
     cout<<"Elemento encontrado: [";
+    //search_export=
     for(int index=0; index < NUMDIMS; ++index){
       cout<<a_rectB->m_min[index]<<" "<<a_rectB->m_max[index]<<" ";
-
     }
     std::cout<<"]"<<endl<<"---------------------------------------------"<<endl;
+    search_export.push_back(a_branch->m_data);
+    cout<<"ID: "<<a_branch->m_data<<endl;
   }
   return aux;
 }
@@ -1748,15 +1765,14 @@ bool RTREE_QUAL::Search(Node* a_node, Rect* a_rect, int& a_foundCount, std::func
     // This is a leaf node
     for(int index=0; index < a_node->m_count; ++index)
     {
-      if(Cover(a_rect, &a_node->m_branch[index].m_rect))
+      if(Cover(a_rect, &a_node->m_branch[index]))
       {
-        DATATYPE& id = a_node->m_branch[index].m_data;
+        int& id = a_node->m_branch[index].m_data;
         ++a_foundCount;
-
-          if(callback && !callback(id))
-          {
-            return false; // Don't continue searching
-          }
+        if(callback && !callback(id))
+        {
+          return false; // Don't continue searching
+        }
       }
     }
   }
