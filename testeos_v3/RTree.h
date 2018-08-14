@@ -64,7 +64,7 @@ class RTFileStream;  // File I/O helper class, look below for implementation and
 ///        array similar to MFC CArray or STL Vector for returning search query result.
 ///
 template<class DATATYPE, class ELEMTYPE, int NUMDIMS,
-         class ELEMTYPEREAL = ELEMTYPE, int TMAXNODES, int TMINNODES = TMAXNODES / 2>
+         class ELEMTYPEREAL = ELEMTYPE, int TMAXNODES=2, int TMINNODES = TMAXNODES / 2>
 class RTree
 {
 protected:
@@ -535,7 +535,7 @@ void RTREE_QUAL::read_MBR_tree(Node *p_node){
     export_aux++;
     data_tree.push_back(data_node());
     data_tree[export_aux].leaf=false;
-    data_tree[export_aux].nivel_data=p_node->m_level;
+    data_tree[export_aux].nivel_data=p_node->m_level+1;
     for(int axis=0; axis<NUMDIMS; ++axis)
     {
       data_tree[0].limits[2*axis]=p_node->m_branch[0].m_rect.m_min[axis];
